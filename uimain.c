@@ -8,9 +8,6 @@ int main() {
 
   getline(&input, &len, stdin);
 
-   printf("%s", input);
-
-  free(input);
-    
+  free(input);    
   return 0;
 }
