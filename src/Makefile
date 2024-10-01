@@ -5,7 +5,7 @@ CC = gcc
 CFLAGS = -Wall -g
 
 # Object files
-OBJ = uimain.o
+OBJ = uimain.o tokenizer.o
 
 # Executable name
 EXEC = uimain
@@ -20,6 +20,9 @@ $(EXEC): uimain.o
 # Compile uimain.c
 uimain.o: uimain.c tokenizer.h history.h
 	$(CC) $(CFLAGS) -c uimain.c
+
+# Complie tokenizer.c
+	$(CC) $(CFLAGS) -c tokenizer.c
 
 # Clean target to remove generated files
 clean:
