@@ -1,13 +1,34 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
+#include "tokenizer.h"
+
 int main() {
-  char *input = NULL;
-  size_t len = 0;
+    char buffer[100];
 
-  printf("$ ");
+    while (1) {
+        printf("$ ");
+        
+        //read input using fgets
+        if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+	  buffer[strcspn(buffer, "\n")] = '\0'; // gets rid of the newline character
 
-  getline(&input, &len, stdin);
+            //check if "exit"
+            if (strcmp(buffer, "exit") == 0) {
+                break; //breaks the program
+            }
 
-  free(input);    
-  return 0;
+	    char **tokens = tokenize(buffer);
+	    if(tokens != NULL){
+	      print_tokens(tokens);
+	      free_tokens(tokens);
+		
+	    }
+
+        } else {
+            printf("Error reading input.\n");
+            break;
+        }
+    }
+
+    return 0;
 }

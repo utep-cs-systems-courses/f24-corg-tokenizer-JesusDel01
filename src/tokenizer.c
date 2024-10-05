@@ -1,5 +1,6 @@
 #include "tokenizer.h"
-#include <stdlib.h> 
+#include <stdlib.h>
+#include <stdio.h>
 
 /* Return true (non-zero) if c is a whitespace character ('\t' or ' '). */
 int space_char(char c) {
@@ -58,4 +59,61 @@ char *copy_str(char *inStr, short len) {
     }
     copy[len] = '\0';
     return copy;
+}
+
+
+char **tokenize(char *str) {
+    if (str == NULL) return NULL;
+
+    int num_tokens = count_tokens(str); 
+    
+    //alloctaes memory for the array + 1 for the null'0' operator
+    char **tokens = (char **)malloc((num_tokens + 1) * sizeof(char *));
+    if (tokens == NULL) {
+        return NULL; //memory allocation failed
+    }
+    
+    char *current = str;
+    int index = 0;
+
+    //extarct tokens and store pointers
+    while ((current = token_start(current)) != NULL) { //start of token
+        char *end = token_terminator(current); //end of token
+        int token_len = end - current;
+
+        //finds the tokens and stores them in the array
+        tokens[index] = copy_str(current, token_len);
+        if (tokens[index] == NULL) {
+	  //if allocation fails then free tokens one by one
+            for (int j = 0; j < index; j++) {
+                free(tokens[j]);
+            }
+            free(tokens);
+            return NULL;
+        }
+        index++;
+        current = end; //move to the next token
+    }
+    tokens[index] = NULL; //assigns null '0' to the last element in the array
+
+    return tokens;
+}
+
+//prints tokens
+void print_tokens(char **tokens) {
+    if (tokens == NULL) return;
+
+    for (int i = 0; tokens[i] != NULL; i++) {
+        printf("Token[%d]: %s\n", i, tokens[i]);
+    }
+}
+
+// frees memory
+void free_tokens(char **tokens) {
+    if (tokens == NULL) return;
+
+    for (int i = 0; tokens[i] != NULL; i++) {
+        free(tokens[i]); 
+    }
+    free(tokens); 
 }

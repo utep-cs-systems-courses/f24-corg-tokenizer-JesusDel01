@@ -1,29 +1,21 @@
-# Compiler to use
-CC = gcc
+# List of object files
+OBJS = uimain.o tokenizer.o
 
-# Compiler flags
-CFLAGS = -Wall -g
+# Build the main executable "uimain" from the object files
+uimain: $(OBJS)
+	$(CC) -o uimain $(CFLAGS) $(OBJS)
 
-# Object files
-OBJ = uimain.o tokenizer.o
-
-# Executable name
-EXEC = uimain
-
-# Default target
-all: $(EXEC)
-
-# Build the main executable
-$(EXEC): uimain.o
-	$(CC) $(CFLAGS) uimain.o -o $(EXEC)
-
-# Compile uimain.c
-uimain.o: uimain.c tokenizer.h history.h
+# Build individual oject files
+uimain.o: uimain.c tokenizer.h
 	$(CC) $(CFLAGS) -c uimain.c
 
-# Complie tokenizer.c
+tokenizer.o: tokenizer.c tokenizer.h
 	$(CC) $(CFLAGS) -c tokenizer.c
 
-# Clean target to remove generated files
+# clean target to delete the generated files
 clean:
-	rm -f $(OBJ) $(EXEC)
+	rm -f *.o uimain
+
+#convenience to run th uimian executable
+run: uimain
+	./uimain
