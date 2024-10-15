@@ -1,21 +1,23 @@
 # List of object files
-OBJS = uimain.o tokenizer.o
+OBJS = uimain.o tokenizer.o history.o
+
+# Compiler flags for debugging and optimization
+CFLAGS = -g -O3
+
+# The first target is the default target. Usually named "all"
+all: uimain
 
 # Build the main executable "uimain" from the object files
 uimain: $(OBJS)
 	$(CC) -o uimain $(CFLAGS) $(OBJS)
 
-# Build individual oject files
-uimain.o: uimain.c tokenizer.h
-	$(CC) $(CFLAGS) -c uimain.c
+# The object files are dependent on their respective header files
+$(OBJS): tokenizer.h history.h
 
-tokenizer.o: tokenizer.c tokenizer.h
-	$(CC) $(CFLAGS) -c tokenizer.c
-
-# clean target to delete the generated files
+# Clean up object files and the executable
 clean:
 	rm -f *.o uimain
 
-#convenience to run th uimian executable
+# Convenience target to run the executable
 run: uimain
 	./uimain
